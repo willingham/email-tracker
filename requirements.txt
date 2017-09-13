@@ -1,2 +1,3 @@
 django
 bs4
+gunicorn
