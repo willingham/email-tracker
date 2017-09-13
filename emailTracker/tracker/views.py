@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.contrib import messages
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import EmailModelForm
 from .models import Email, Activity
@@ -16,7 +17,7 @@ from email.mime.text import MIMEText
 # Create your views here.
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'tracker/home.html'
 
     def get_context_data(self, **kwargs):
@@ -62,7 +63,7 @@ def getMIME(from_addr, reply, subject, event, uuid, body, recipient):
     return msg
 
 
-class EmailCreateView(CreateView):
+class EmailCreateView(LoginRequiredMixin, CreateView):
     form_class = EmailModelForm
     template_name = 'tracker/email-create.html'
     success_url = reverse_lazy('home')
