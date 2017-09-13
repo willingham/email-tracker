@@ -104,3 +104,5 @@ venv.bak/
 emailTracker/emailTracker/settings/sensitive_vars.py
 bin/
 lib/
+include/
+static-serve/
