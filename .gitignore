@@ -106,3 +106,4 @@ bin/
 lib/
 include/
 static-serve/
+src/db.sqlite3
