@@ -101,7 +101,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-emailTracker/emailTracker/settings/sensitive_vars.py
+src/emailTracker/settings/sensitive_vars.py
 bin/
 lib/
 include/
