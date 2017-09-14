@@ -36,7 +36,7 @@ def getSMTPConnection():
     return server, u
 
 
-def formatHtml(self, event, uuid, body, recipient):
+def formatHtml(event, uuid, body, recipient):
         domain = getattr(settings, "EVENT_DOMAIN", None)
         url = "{domain}/event/{uuid}/{event/{to}/"
         url = url.format(domain=domain, event=event, uuid=uuid, to=recipient)
