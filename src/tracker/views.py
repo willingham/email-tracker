@@ -6,9 +6,11 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
+from django.utils import timezone
 
 from .forms import EmailModelForm
-from .models import Email, Activity
+from .models import Email, Activity, getUniqueActivity
 import bs4, smtplib
 import uuid as uid
 from email.mime.multipart import MIMEMultipart
@@ -22,7 +24,29 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         c = super(HomeView, self).get_context_data(**kwargs)
-        c['emails'] = Email.objects.all()
+        emails = Email.objects.all()
+        c['emails_all'] = emails
+        c['emails_active'] = emails.filter(active=True)
+
+        totalOpenByHour = Activity.objects.filter(email__active=True, status='open').extra({'day-hour': 'strftime("%%m-%%d Hour %%H", time)'}).order_by().values('day-hour').annotate(count=Count('id'))
+        activityHours = []
+        activityLevel = []
+        activityLevelMax = 0
+        for item in totalOpenByHour:
+            count = item['count']
+            activityHours.append(item['day-hour'])
+            activityLevel.append(count)
+            if count > activityLevelMax:
+                activityLevelMax = count
+
+        c['totalOpenByHour'] = totalOpenByHour
+        c['activity'] = Activity.objects.all()
+        c['activityHours'] = str(activityHours)
+        c['activityLevel'] = str(activityLevel)
+        c['activityLevelMax'] = activityLevelMax + 1
+        u = getUniqueActivity()
+        print(u)
+
         return c
 
 
