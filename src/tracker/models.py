@@ -1,5 +1,4 @@
 from django.db import models
-import uuid
 
 # Create your models here.
 
@@ -10,7 +9,7 @@ class Email(models.Model):
     body = models.TextField(null=True, blank=True)
     send_date = models.DateTimeField(auto_now_add=True, blank=True)
     recipients = models.TextField(null=True, blank=True)
-    uuid = models.CharField(max_length=64, default=uuid.uuid1, blank=True)
+    uuid = models.CharField(max_length=64, blank=True)
     send_now = models.BooleanField(default=True, blank=True)
     number_sent = models.IntegerField(default=0, blank=True)
 

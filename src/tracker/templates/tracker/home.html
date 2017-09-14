@@ -16,14 +16,15 @@
                     <tr>
                         <th>Date</th>
                         <th>Subject</th>
+                        <th>ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for email in emails %}
                     <tr>
                         <td>{{ email.send_date}}</td>
-
                         <td>{{ email.subject }}</td>
+                        <td>{{ email.uuid }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

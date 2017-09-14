@@ -9,8 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import EmailModelForm
 from .models import Email, Activity
-import bs4
-import smtplib
+import bs4, smtplib
+import uuid as uid
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -38,7 +38,7 @@ def getSMTPConnection():
 
 def formatHtml(event, uuid, body, recipient):
         domain = getattr(settings, "EVENT_DOMAIN", None)
-        url = "{domain}/event/{uuid}/{event/{to}/"
+        url = "{domain}/event/{uuid}/{event}/{to}/"
         url = url.format(domain=domain, event=event, uuid=uuid, to=recipient)
         html = bs4.BeautifulSoup(body, 'html.parser')
 
@@ -71,10 +71,14 @@ class EmailCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         subject = form.cleaned_data.get('subject')
         body = form.cleaned_data.get('body')
-        recipients = form.cleaned_data.get('recipients').splitlines()
+        recipients_orig = form.cleaned_data.get('recipients')
+        recipients = recipients_orig.splitlines()
         reply_to = form.cleaned_data.get('reply_to')
-        uuid = form.cleaned_data.get('uuid')
+        uuid = str(uid.uuid4())
+        form.instance.uuid = uuid
         send_now = form.cleaned_data.get('send_now')
+        print("uuid: ", uuid)
+
         messages.success(self.request, "Added email: {}".format(subject))
         print("send_now: ",send_now)
         if send_now:
