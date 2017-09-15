@@ -94,12 +94,13 @@ class EmailCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         subject = form.cleaned_data.get('subject')
-        body = form.cleaned_data.get('body')
+        body = "<body>" + form.cleaned_data.get('body') + "</body>"
         recipients_orig = form.cleaned_data.get('recipients')
         recipients = recipients_orig.splitlines()
         reply_to = form.cleaned_data.get('reply_to')
         uuid = str(uid.uuid4())
         form.instance.uuid = uuid
+        form.instance.body = body
         send_now = form.cleaned_data.get('send_now')
         print("uuid: ", uuid)
 
