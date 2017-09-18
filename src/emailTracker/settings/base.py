@@ -125,3 +125,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static_storage'),
 ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-serve')
+
+LOGIN_REDIRECT_URL = 'home'
+
+LOGIN_URL = 'login'
