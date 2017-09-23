@@ -39,6 +39,26 @@ class HomeView(LoginRequiredMixin, TemplateView):
             if count > activityLevelMax:
                 activityLevelMax = count
 
+        allActivity = Activity.objects.order_by('-time')
+        uniqueOpensParse = {}
+        for a in allActivity:
+            if a.email.uuid in uniqueOpensParse.keys():
+                uniqueOpensParse[a.email.uuid][a.recipient] = a.time
+            else:
+                uniqueOpensParse[a.email.uuid] = { a.recipient: a.time }
+
+        uniqueOpens = {}
+        for uuid in uniqueOpensParse.keys():
+            uniqueOpens[uuid] = []
+            for email in uniqueOpensParse[uuid].keys():
+                uniqueOpens[uuid].append([email, uniqueOpensParse[uuid][email]])
+        print("Unique opens 2", uniqueOpens)
+
+
+        print("Unique opens: ", uniqueOpens.keys())
+
+        c['uniqueOpens'] = uniqueOpens
+
         c['totalOpenByHour'] = totalOpenByHour
         c['activity'] = Activity.objects.all()
         c['activityHours'] = str(activityHours)
