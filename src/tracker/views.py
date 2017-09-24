@@ -8,6 +8,9 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.utils import timezone
+import datetime
+import time
+from django.utils.dateparse import parse_datetime
 
 from .forms import EmailModelForm
 from .models import Email, Activity, getUniqueActivity
@@ -57,7 +60,24 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
         print("Unique opens: ", uniqueOpens.keys())
 
+        uniqueOpensForGraph = []
+        for hour in activityHours:
+            totalUnique = 0
+            for uuid in uniqueOpens.keys():
+                for open in uniqueOpens[uuid]:
+                    date = parse_datetime(str(open[1]))
+                    print(date, hour)
+                    if date.strftime("%m-%d Hour %H") == hour:
+                        totalUnique += 1
+            uniqueOpensForGraph.append(totalUnique)
+
+        print("UniqueOpensForGraph: ", uniqueOpensForGraph)
+
+
+
+
         c['uniqueOpens'] = uniqueOpens
+        c['uniqueOpensForGraph'] = uniqueOpensForGraph
 
         c['totalOpenByHour'] = totalOpenByHour
         c['activity'] = Activity.objects.all()

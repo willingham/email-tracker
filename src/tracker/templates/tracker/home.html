@@ -48,7 +48,8 @@
 
                 <div class="footer">
                     <div class="legend">
-                        <i class="fa fa-circle text-info"></i> Open
+                        <i class="fa fa-circle text-info"></i> Total Opens
+                        <i class="fa fa-circle text-info text-alert"></i> Unique First Opens
                     </div>
                     <hr>
                     <div class="stats">
@@ -113,8 +114,11 @@
 var data = {
   labels: {{ activityHours|safe }},
   series: [
-    {
-      data: {{ activityLevel|safe }}
+      {
+          data: {{activityLevel | safe }},
+      },
+{
+      data: {{ uniqueOpensForGraph|safe }}
     }
   ]
 };

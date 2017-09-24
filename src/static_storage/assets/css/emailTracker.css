@@ -15,3 +15,7 @@
 #my-chart {
     height: 400px;
 }
+
+.text-alert {
+    color: red !important;
+}
