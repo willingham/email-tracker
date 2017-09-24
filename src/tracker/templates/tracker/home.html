@@ -131,6 +131,10 @@ var options = {
         }),
         Chartist.plugins.tooltip()
     ],
+    axisY: {
+        onlyInteger: true,
+        offset: 20
+    },
 };
 
 /* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. */
