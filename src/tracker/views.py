@@ -65,8 +65,8 @@ class HomeView(LoginRequiredMixin, TemplateView):
         c['activityLevel'] = str(activityLevel)
         c['activityLevelMax'] = activityLevelMax + 1
         u = getUniqueActivity()
-        print(u)
 
+        print("activityHours", c['activityHours'])
         return c
 
 

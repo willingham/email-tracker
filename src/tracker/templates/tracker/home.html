@@ -43,7 +43,8 @@
                 <p class="category">Total emails opened per hour</p>
             </div>
             <div class="content">
-                <div id="my-chart"></div>
+                <div id="my-chart">
+                </div>
 
                 <div class="footer">
                     <div class="legend">
@@ -124,6 +125,12 @@ var options = {
     low: 0,
     onlyInteger: true,
     showArea: true,
+    plugins: [
+        Chartist.plugins.ctPointLabels({
+          textAnchor: 'middle', labelInterpolationFnc: function(value) {return '$' + value.toFixed(2)}
+        }),
+        Chartist.plugins.tooltip()
+    ],
 };
 
 /* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. */
@@ -148,5 +155,6 @@ var responsiveOptions = [
 
 /* Initialize the chart with the above settings */
 new Chartist.Line('#my-chart', data, options, responsiveOptions);
+
 </script>
 {% endblock %}
