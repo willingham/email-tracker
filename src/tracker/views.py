@@ -19,6 +19,9 @@ import uuid as uid
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import threading
+import logging
+
+logger = logging.getLogger('django')
 
 # Create your views here.
 
@@ -163,7 +166,7 @@ def sendMessages(recipients, reply_to, subject, uuid, body):
                 number_sent += 1
                 con.sendmail(f, [recipient], msg.as_string())
             except Exception as e:
-                print(e)
+                #print(e)
                 number_sent -= 1
                 if not SMTPIsActive(con):
                     print("         : inactive")
@@ -171,8 +174,10 @@ def sendMessages(recipients, reply_to, subject, uuid, body):
                 recipients.append(recipient)
             if error:
                 print("Recipient [ERR]:", recipient)
+                logger.info("Recipient [ERR]:" + recipient)
             else:
                 print("Recipient [" + str(number_sent) + "]:", recipient)
+                logger.info("Recipient [" + str(number_sent) + "]:" + recipient)
 
         messages.success(self.request, "Sent {} messages.".format(number_sent))
     except:

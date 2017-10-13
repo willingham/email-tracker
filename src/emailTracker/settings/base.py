@@ -152,7 +152,7 @@ LOGGING = {
             'formatter': 'verbose'
         },
         'logfile': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': BASE_DIR + "/../logfile",
         }
@@ -165,7 +165,7 @@ LOGGING = {
         },
         'django':{
             'level': 'DEBUG',
-            'handlers': ['console', 'logfile'],
+            'handlers': ['logfile'],
             'propagate': True,
         }
     }
