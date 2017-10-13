@@ -11,6 +11,7 @@ class Email(models.Model):
     recipients = models.TextField(null=True, blank=True)
     uuid = models.CharField(max_length=64, blank=True)
     send_now = models.BooleanField(default=True, blank=True)
+    number_recipients = models.IntegerField(default=0, blank=True)
     number_sent = models.IntegerField(default=0, blank=True)
     active = models.BooleanField(default=True, blank=True)
 
