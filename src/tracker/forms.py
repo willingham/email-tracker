@@ -13,4 +13,4 @@ class EmailModelForm(forms.ModelForm):
 
     class Meta:
         model = Email
-        exclude = ['number_sent', 'from_address', 'uuid', 'send_date']
+        exclude = ['number_sent', 'from_address', 'uuid', 'send_date', 'number_recipients']

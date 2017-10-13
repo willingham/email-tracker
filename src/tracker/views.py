@@ -18,6 +18,7 @@ import bs4, smtplib
 import uuid as uid
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import threading
 
 # Create your views here.
 
@@ -100,6 +101,14 @@ def getSMTPConnection():
     return server, u
 
 
+def SMTPIsActive(con):
+    try:
+        status = con.noop()[0]
+    except:  # smtplib.SMTPServerDisconnected
+        status = -1
+    return True if status == 250 else False
+
+
 def formatHtml(event, uuid, body, recipient):
         domain = getattr(settings, "EVENT_DOMAIN", None)
         url = "{domain}/event/{uuid}/{event}/{to}/"
@@ -127,6 +136,50 @@ def getMIME(from_addr, reply, subject, event, uuid, body, recipient):
     return msg
 
 
+class SendMessagesThread(threading.Thread):
+    def __init__(self, recipients, reply_to, subject, uuid, body, *args, **kwargs):
+        self.recipients = recipients
+        self.reply_to = reply_to
+        self.subject = subject
+        self.uuid = uuid
+        self.body = body
+        super(SendMessagesThread, self).__init__(*args, **kwargs)
+
+    def run(self):
+        sendMessages(self.recipients, self.reply_to, self.subject, self.uuid, self.body)
+
+
+def sendMessages(recipients, reply_to, subject, uuid, body):
+    number_sent = 0
+    try:
+        con, f = getSMTPConnection()
+        print("Connection:", con)
+        print("F:", f)
+        while (len(recipients)) > 0:
+            error = 0
+            recipient = recipients.pop()
+            try:
+                msg = getMIME(f, reply_to, subject, "open", uuid, body, recipient)
+                number_sent += 1
+                con.sendmail(f, [recipient], msg.as_string())
+            except Exception as e:
+                print(e)
+                number_sent -= 1
+                if not SMTPIsActive(con):
+                    print("         : inactive")
+                    con, f = getSMTPConnection()
+                recipients.append(recipient)
+            if error:
+                print("Recipient [ERR]:", recipient)
+            else:
+                print("Recipient [" + str(number_sent) + "]:", recipient)
+
+        messages.success(self.request, "Sent {} messages.".format(number_sent))
+    except:
+        messages.warning(self.request, "Couldn't send messages!  Try again.")
+    Email.objects.filter(uuid=uuid).update(number_sent=number_sent)
+
+
 class EmailCreateView(LoginRequiredMixin, CreateView):
     form_class = EmailModelForm
     template_name = 'tracker/email-create.html'
@@ -141,22 +194,15 @@ class EmailCreateView(LoginRequiredMixin, CreateView):
         uuid = str(uid.uuid4())
         form.instance.uuid = uuid
         form.instance.body = body
+        form.instance.number_recipients = len(recipients)
+        form.instance.number_sent = -1
         send_now = form.cleaned_data.get('send_now')
         print("uuid: ", uuid)
 
         messages.success(self.request, "Added email: {}".format(subject))
         print("send_now: ",send_now)
         if send_now:
-            try:
-                number_sent = 0
-                con, f = getSMTPConnection()
-                for recipient in recipients:
-                    msg = getMIME(f, reply_to, subject, "open", uuid, body, recipient)
-                    con.sendmail(f, [recipient], msg.as_string())
-                    number_sent += 1
-                messages.success(self.request, "Sent {} messages.".format(number_sent))
-            except:
-                messages.warning(self.request, "Couldn't send messages!  Try again.")
+            SendMessagesThread(recipients, reply_to, subject, uuid, body).start()
 
 
         return super(EmailCreateView, self).form_valid(form)

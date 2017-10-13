@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -129,3 +129,39 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-serve')
 LOGIN_REDIRECT_URL = 'home'
 
 LOGIN_URL = 'login'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'gunicorn.errors': {
+            'level': 'INFO',
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'django':{
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': True,
+        }
+    }
+}

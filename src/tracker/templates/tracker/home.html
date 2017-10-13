@@ -76,6 +76,7 @@
                             <th>Date</th>
                             <th>Subject</th>
                             <th>ID</th>
+                            <th>Num Success/Num Recipients</th>
                             <th>Open Records</th>
                         </tr>
                     </thead>
@@ -85,6 +86,7 @@
                             <td>{{ email.send_date}}</td>
                             <td>{{ email.subject }}</td>
                             <td>{{ email.uuid }}</td>
+                            <td>{{ email.number_sent }}/{{ email.number_recipients }}</td>
                             <td>
                                 <ul>
                                 {% for key, value in uniqueOpens.items %}
