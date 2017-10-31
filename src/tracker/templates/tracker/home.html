@@ -9,6 +9,8 @@
                 <p class="category">Total emails opened per hour</p>
             </div>
             <div class="content" id="d3chart">
+                <div id='tooltip2' style='position:absolute;background-color:lightgray;padding:5px'></div>
+
                 <script>
                     var margin = {top: 10, right: 10, bottom: 100, left: 40},
                         margin2 = {top: 430, right: 10, bottom: 20, left: 40},
@@ -63,6 +65,7 @@
 
                     data = [{'hour': '09-24 Hour 20', 'total': 3, 'unique': 3}, {'hour': '09-24 Hour 21', 'total': 4, 'unique': 2}, {'hour': '09-24 Hour 22', 'total': 3, 'unique': 3}]
                     data = {{ d3list|safe }}
+                    let states = {{ d3list|safe }}
 
 
                     color.domain(d3.keys(data[0]).filter(function(key) { return key !== "hour"; }));
@@ -137,6 +140,49 @@
                       focus.select(".x.axis").call(xAxis);
                       focus.select(".y.axis").call(yAxis);
                     }
+
+                    const tooltip = d3.select('#tooltip2');
+                    const tooltipLine = svg.append('line');
+
+                    let tipBox = svg.append('rect')
+                        .attr('width', width)
+                        .attr('height', height)
+                        .attr('opacity', 0)
+                        .attr('x', 40)
+                        .attr('y', 10)
+                        .on('mousemove', drawTooltip)
+                        .on('mouseout', removeTooltip);
+
+                    function removeTooltip() {
+                        if (tooltip) tooltip.style('display', 'none');
+                        if (tooltipLine) tooltipLine.attr('stroke', 'none');
+                    }
+
+                    function drawTooltip() {
+                        const date = x.invert(d3.mouse(tipBox.node())[0]);
+
+                        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        const formatDate = (d) => months[d.getMonth()-1] + '-' + d.getDate() + ' Hour:' + d.getHours();
+
+                        /*
+                        states.sort((a, b) => {
+                            return b.history.find(h => h.year == year).population - a.history.find(h => h.year == year).population;
+                        })*/
+
+                        tooltipLine.attr('stroke', 'black')
+                            .attr('x1', x(date))
+                            .attr('x2', x(date))
+                            .attr('y1', 0)
+                            .attr('y2', height);
+
+                          tooltip.html(formatDate(date))
+                            .style('display', 'block')
+                            .style('left', (d3.event.pageX + 20) + 'px')
+                            .style('top', (d3.event.pageY - 20) + 'px')
+                            .data(data.filter(d => formatDate(d.hour) === formatDate(date)))
+                            .append('div')
+                            .html(d => 'Total' + ': ' + d.total + "<br>" + 'Unique' + ': ' + d.unique);
+                        }
 
                 </script>
                 <div class="footer">

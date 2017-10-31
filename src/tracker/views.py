@@ -97,9 +97,10 @@ class HomeView(LoginRequiredMixin, TemplateView):
             temp['total'] = activityLevel[i]
             temp['unique'] = uniqueOpensForGraph[i]
             d3.append(temp)
-        #d3.append({'hour': '09-24 Hour 21', 'total': 18, 'unique': 2})
-        #d3.append({'hour': '09-24 Hour 22', 'total': 3, 'unique': 3})
+        d3.append({'hour': '09-24 Hour 21', 'total': 4, 'unique': 2})
+        d3.append({'hour': '09-24 Hour 22', 'total': 3, 'unique': 3})
         c['d3list'] = str(d3)
+        print(d3)
 
         print("activityHours", c['activityHours'])
         return c
