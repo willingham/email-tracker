@@ -89,6 +89,15 @@ class HomeView(LoginRequiredMixin, TemplateView):
         c['activityLevel'] = str(activityLevel)
         c['activityLevelMax'] = activityLevelMax + 1
         u = getUniqueActivity()
+        d3 = []
+        print(type(activityHours))
+        for i in range(len(activityHours)):
+            temp = {}
+            temp['hour'] = activityHours[i]
+            temp['total'] = activityLevel[i]
+            temp['unique'] = uniqueOpensForGraph[i]
+            d3.append(temp)
+        c['d3list'] = str(d3)
 
         print("activityHours", c['activityHours'])
         return c

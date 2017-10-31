@@ -19,3 +19,67 @@
 .text-alert {
     color: red !important;
 }
+
+svg {
+  .axis {
+    font-size: 8px;
+  }
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 5px;
+  }
+
+  .tick > line {
+    display: none;
+  }
+
+  rect.zoom-panel {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+  }
+
+  .dot {
+    stroke-width: 2px;
+    fill: #fff;
+  }
+}
+
+
+
+svg {
+  font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+}
+
