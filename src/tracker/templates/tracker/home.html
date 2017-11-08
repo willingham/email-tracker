@@ -9,7 +9,7 @@
                 <p class="category">Total emails opened per hour</p>
             </div>
             <div class="content" id="d3chart">
-                <div id='tooltip2' style='position:absolute;background-color:lightgray;padding:5px'></div>
+                <div id="tooltip2" style="position:absolute;background-color:lightgray;padding:5px"></div>
 
                 <script>
                     var margin = {top: 10, right: 10, bottom: 100, left: 40},
@@ -200,7 +200,6 @@
     </div>
 </div>
 
-<!--
 <div class="row">
     <div class="col-md-12" id="chart-col">
         <div class="card">
@@ -209,10 +208,7 @@
                 <p class="category">Total emails opened per hour</p>
             </div>
             <div class="content" id="chart-col">
-                <div id="my-chart"></div>
-                <script>
-
-            </script>
+                <canvas id="chartjs-chart" width="600" height="400"></canvas>
                 <div class="footer">
                     <div class="legend">
                         <i class="fa fa-circle text-info"></i> Total Opens
@@ -227,7 +223,7 @@
         </div>
     </div>
 </div>
--->
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -341,4 +337,22 @@ new Chartist.Line('#my-chart', data, options, responsiveOptions);
 
 </script>
 -->
+<script>
+    var densityCanvas = document.getElementById("chartjs-chart");
+
+    Chart.defaults.global.defaultFontFamily = "Lato";
+    Chart.defaults.global.defaultFontSize = 18;
+    var uniqueOpens = {
+        label: 'Unique Opens',
+        data: {{ uniqueOpensForGraph|safe }}
+    };
+
+    var barChart = new Chart(densityCanvas, {
+        type: 'bar',
+        data: {
+            labels: {{ activityHours|safe }},
+            datasets: [uniqueOpens]
+        }
+    });
+</script>
 {% endblock %}
