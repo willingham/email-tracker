@@ -371,7 +371,14 @@ new Chartist.Line('#my-chart', data, options, responsiveOptions);
                     stacked: false,
                 }]
             },
-
+            pan: {
+                enabled: true,
+                mode: 'x',
+            },
+            zoom: {
+                enabled: true,
+                mode: 'x',
+            }
         }
     });
 </script>
