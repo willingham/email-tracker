@@ -77,6 +77,13 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
         print("UniqueOpensForGraph: ", uniqueOpensForGraph)
 
+        activityHours.append('09-24 Hour 21')
+        uniqueOpensForGraph.append(2)
+        activityLevel.append(4)
+        activityHours.append('09-24 Hour 22')
+        uniqueOpensForGraph.append(3)
+        activityLevel.append(3)
+
 
 
 
