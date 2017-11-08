@@ -344,14 +344,34 @@ new Chartist.Line('#my-chart', data, options, responsiveOptions);
     Chart.defaults.global.defaultFontSize = 18;
     var uniqueOpens = {
         label: 'Unique Opens',
+        backgroundColor: ["red"],
         data: {{ uniqueOpensForGraph|safe }}
     };
+    var totalOpens = {
+        label: 'Total Opens',
+        backgroundColor: ["#1DC7EA"],
+        data: {{activityLevel | safe }}
+    };
+
+
 
     var barChart = new Chart(densityCanvas, {
         type: 'bar',
         data: {
             labels: {{ activityHours|safe }},
-            datasets: [uniqueOpens]
+            datasets: [uniqueOpens, totalOpens]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    stacked: false,
+                }],
+                yAxes: [{
+                    stacked: false,
+                }]
+            },
+
         }
     });
 </script>
