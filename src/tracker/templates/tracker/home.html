@@ -344,12 +344,12 @@ new Chartist.Line('#my-chart', data, options, responsiveOptions);
     Chart.defaults.global.defaultFontSize = 18;
     var uniqueOpens = {
         label: 'Unique Opens',
-        backgroundColor: ["red"],
+        fillColor: ["red"],
         data: {{ uniqueOpensForGraph|safe }}
     };
     var totalOpens = {
         label: 'Total Opens',
-        backgroundColor: ["#1DC7EA"],
+        fillColor: ["#1DC7EA"],
         data: {{activityLevel | safe }}
     };
 
