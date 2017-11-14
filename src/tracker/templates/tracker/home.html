@@ -339,19 +339,24 @@ new Chartist.Line('#my-chart', data, options, responsiveOptions);
 -->
 <script>
     var densityCanvas = document.getElementById("chartjs-chart").getContext('2d');
+    var t = {{ uniqueOpensForGraph|safe }};
+    unique = [];
+    total = [];
+    for (item in t) {
+        unique.push('red');
+        total.push('#1DC7EA')
+    };
 
     Chart.defaults.global.defaultFontFamily = "Lato";
     Chart.defaults.global.defaultFontSize = 18;
     var uniqueOpens = {
         label: 'Unique Opens',
-        fillColor: ["red"],
-        strokeColor: ["red"],
+        backgroundColor: unique,
         data: {{ uniqueOpensForGraph|safe }}
     };
     var totalOpens = {
         label: 'Total Opens',
-        fillColor: ["#1DC7EA"],
-        strokeColor: ["#1DC7EA"],
+        backgroundColor: total,
         data: {{activityLevel | safe }}
     };
 
