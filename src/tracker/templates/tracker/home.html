@@ -345,11 +345,13 @@ new Chartist.Line('#my-chart', data, options, responsiveOptions);
     var uniqueOpens = {
         label: 'Unique Opens',
         fillColor: ["red"],
+        strokeColor: ["red"],
         data: {{ uniqueOpensForGraph|safe }}
     };
     var totalOpens = {
         label: 'Total Opens',
         fillColor: ["#1DC7EA"],
+        strokeColor: ["#1DC7EA"],
         data: {{activityLevel | safe }}
     };
 
